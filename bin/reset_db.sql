@@ -2,6 +2,7 @@ DROP TABLE reaction_time;
 DROP TABLE response;
 DROP TABLE time_elapsed;
 DROP TABLE ordering;
+DROP TABLE timeofaction;
 
 CREATE TABLE reaction_time(
     pid text UNIQUE
@@ -15,7 +16,7 @@ CREATE TABLE time_elapsed(
 CREATE TABLE ordering(
     pid text UNIQUE
 );
-CREATE TABLE answers(
-    task text UNIQUE,
-    answer text
-)
+CREATE TABLE timeofaction(
+    pid text UNIQUE,
+    t TIMESTAMP WITH TIME ZONE default CURRENT_TIMESTAMP
+);

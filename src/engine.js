@@ -1,19 +1,20 @@
+// const { parseFlagList } = require("mysql/lib/ConnectionConfig");
 
 let LONGTERMS = [1, 7, 6]
 let start = Date.now()
 document.addEventListener('DOMContentLoaded', main, false);
 
-
 // A quick little namespace object so that dat2func doesn't have to work too hard.
-let nameToFunc = {EMWordStim: EMWordStim,
+let nameToFunc = {startSurvey: startSurvey,
+             EMWordStim: EMWordStim,
              EMObjectPicture: EMObjectPicture,
              EFRuleID: EFRuleID,
              SMObjectNaming: SMObjectNaming,
              WMForwardDigitSpan: WMForwardDigitSpan,
              WMBackwardDigitSpan: WMBackwardDigitSpan,
              EFStroop: EFStroop,
-             endSurvey: endSurvey,
-             PSStringComparison: PSStringComparison};
+             PSStringComparison: PSStringComparison,
+             endSurvey: endSurvey};
 
 let pressAny = '<p style="font-size:32px">Press any key to continue...<p>'
 // Standard shuffle function
@@ -41,41 +42,13 @@ function endTimer() {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'stopwatch.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
-    
+
     let packet = {
         time: Date.now() - start,
         pid: pid
     }
 
     xhr.send(JSON.stringify(packet))
-}
-
-function getPR() {
-    const params = new URLSearchParams(window.location.search)
-    return parseInt(params.get('pr'))
-}
-
-function getRID() {
-    const params = new URLSearchParams(window.location.search)
-    return params.get('RID')
-}
-
-var pr = getPR()
-console.log('Practice mode is: ' + pr)
-
-var cc = 'COMPLETION_CODE' // Nts
-// !: Uncomment if there are different completion codes for each study.
- if (pr === 0) {
-     cc = '25C4D2A3'
- } else if (pr === 1){
-    cc = '25C4D2A3' // Nts
-}
-
-var survey_address = 'COMPLETION_CODE'  
-if (pr === 0) {
-     survey_address = 'https://uchicago.co1.qualtrics.com/jfe/form/SV_cwh8N5LfbSjk4Zw/?RID=' + getRID()
- } else if (pr === 1){
-    survey_address = 'https://uchicago.co1.qualtrics.com/jfe/form/SV_a5iquM5d091l2pE/?RID=' + getRID()
 }
 
 function getParams(func) {
@@ -144,7 +117,7 @@ function dat2Func(dat){
     } else if (params.includes('delay')) {
         let dparam = parseInt(dat['stimsType'].slice(0, -1));
         return tarfunc(dat['stimuli'], dparam * 1000, data); // We have to convert seconds to ms
-    } else if (params.includes('question')){ // TA: is there where answers are being stored?
+    } else if (params.includes('question')){
         return tarfunc(dat['stimuli'][0])
     } else {
         return tarfunc(dat['trials'], data);
@@ -164,7 +137,7 @@ function itemsByDifficulty(qBlock, difficulty){
 async function easyBlock(qBlock){
     /**
      * Defines the easy questions. Basically each of these three blocks are identical except for difficulty.
-     * I wouldn't say this is a _good_ solution to the problem that jspsych expects one init per experiment, 
+     * I wouldn't say this is a _good_ solution to the problem that jspsych expects one init per experiment,
      * but it's the best one I could think of.
      */
     let block = {};
@@ -222,7 +195,7 @@ async function medBlock(qBlock){
     });
     let tarNums = itemsByDifficulty(qBlock, 'medium');
     let orderedNums = fisherYates(tarNums);
-    let allpics = await await getPics()['medium'];
+    let allpics = await getPics()['medium'];
 
     for (const i in orderedNums){
         timeline.push(await dat2Func(qBlock[orderedNums[i]]));
@@ -244,7 +217,7 @@ async function medBlock(qBlock){
 }
 
 async function TESTBLOCK(qBlock) {
-    // This is a special block I use to test stuff, it isn't connected to the others using the 
+    // This is a special block I use to test stuff, it isn't connected to the others using the
     // on_finish chaining technique.
     let block = {};
     let timeline = [];
@@ -253,7 +226,7 @@ async function TESTBLOCK(qBlock) {
         stimulus: 'If you see this message, tell Coen he screwed up.',
         prompt: pressAny
     });
-    let testcases = ['ES11'];
+    let testcases = ['833'];
     for (let i of testcases) {
         timeline.push(await dat2Func(qBlock[i]));
     }
@@ -298,9 +271,7 @@ async function practiceBlock(qBlock){
 
     // If you want the test to stop after the practice round, get rid of this timeline push.
 
-    if (pr === 0) {
-        
-        timeline.push({type: 'html-button-response',
+    timeline.push({type: 'html-button-response',
         stimulus: 'Would you like to repeat the practice round?',
         choices: ['yes', 'no'],
         on_finish: async function (data) {
@@ -308,19 +279,11 @@ async function practiceBlock(qBlock){
             if (data['button_pressed'] === '1') {
                 jsPsych.init(await easyBlock(qBlock))
             } else {
-                jsPsych.init(await practiceBlock(qBlock)) 
+                jsPsych.init(await practiceBlock(qBlock))
             }
         }
-        })
-    } else if (pr === 1) {
-        timeline.push({
-            type: 'call-function',
-            func: function () {
-                window.location.replace(survey_address)
-            }})
-    }
+    })
 
-    
     block['timeline'] = timeline;
     return block}
 
@@ -336,7 +299,7 @@ async function hardBlock(qBlock){
     })
     let tarNums = itemsByDifficulty(qBlock, 'hard');
     let orderedNums = fisherYates(tarNums);
-    let allpics = await await getPics()['hard'];
+    let allpics = await getPics()['hard'];
 
     for (const i in orderedNums){
         timeline.push(await dat2Func(qBlock[orderedNums[i]]));
@@ -369,30 +332,86 @@ async function endBlock(qBlock){
         let data = {stims_type: dat['stimsType'], item: 'LO' + dat['taskNum'], difficulty: dat['difficulty']};
         timeline.push(EMLongTerm(dat['stimuli'], dat['trials'], data))
     }
-
-    // let surveyQs = itemsByDifficulty(qBlock, 'survey')
-    // timeline.push({
-    //     type: 'html-keyboard-response',
-    //     stimulus: "For each of the following abilities, please rate yourself compared to an <b> average person </b> your age with normal cognitive abilities.",
-    //     prompt: pressAny
-    // })
-    // let rSurveyQs = fisherYates(surveyQs)
-    // for (const i in rSurveyQs){
-    //     let dat = qBlock[rSurveyQs[i]]
-    //     timeline.push(endSurvey(dat['stimuli'], {item: dat['taskNum']}))
-    // }
+    let surveyQs = itemsByDifficulty(qBlock, 'survey')
+    timeline.push({
+        type: 'html-keyboard-response',
+        stimulus: "For each of the following abilities, please rate yourself compared to an <b> average person </b> your age with normal cognitive abilities.",
+        prompt: pressAny
+    })
+    let rSurveyQs = fisherYates(surveyQs)
+    for (const i in rSurveyQs){
+        let dat = qBlock[rSurveyQs[i]]
+        timeline.push(endSurvey(dat['stimuli'], {item: dat['taskNum']}))
+    }
 
     timeline.push({type: 'call-function',
         func: endTimer})
 
-    timeline.push({type: 'html-button-response', 
+    timeline.push({type: 'html-button-response',
     stimulus: "Thanks for taking the time to do this experiment!",
     choices: ['Press here to complete the experiment.'],
-    on_finish: function(data){window.location.replace(survey_address)}
+    on_finish: function(data){window.location.replace('https://app.prolific.co/submissions/complete?cc=7BA58854')}
     })
     block['timeline'] = timeline;
     return block
 }
+
+async function startBlock(qBlock){
+    /**
+     * Similar to the practice block, the end block just does the survey and the long term memory questions.
+     */
+    let block = {};
+    let timeline = [];
+    timeline.push({
+        type: 'html-keyboard-response',
+        stimulus: "Before we begin the experiment, please fill out this short survey!",
+        prompt: pressAny
+    })
+    let surveyQs = itemsByDifficulty(qBlock, 'surveyB')
+    timeline.push({
+        type: 'html-keyboard-response',
+        stimulus: "For each of the following abilities, please rate yourself compared to an <b> average person </b> your age with normal cognitive abilities.",
+        prompt: pressAny
+    })
+    let rSurveyQs = fisherYates(surveyQs)
+    for (const i in rSurveyQs){
+        let dat = qBlock[rSurveyQs[i]]
+        timeline.push(endSurvey(dat['stimuli'], {item: dat['taskNum']}))
+    }
+
+    timeline.push({type: 'call-function',
+        func: endTimer})
+
+    // end?
+    timeline.push({type: 'html-keyboard-response',
+        stimulus: 'Thank you! Continue to experiment.',
+        prompt: pressAny
+    })
+    // block['timeline'] = timeline;
+    // return block
+
+    // new end
+    console.log(timeline)
+    let litem = await timeline[timeline.length - 1]
+    let ltask = await litem['timeline'][litem['timeline'].length - 1]
+    ltask['on_finish'] = async function (data) {
+        validateData();
+        jsPsych.init(await practiceBlock(qBlock))
+    }
+    block['timeline'] = timeline;
+    block['preload_images'] = allpics;
+
+    return block
+}
+// The function will help to determine the next question after a question is answered and
+//  I feel start block should present the 1st question.
+async function determineNextQuestion() {
+    return
+}
+
+
+
+
 
 async function main() {
     let timeline = [];
@@ -411,7 +430,10 @@ async function main() {
     let qBlock = await loadQuestions();
 
 
-    timeline.push(await practiceBlock(qBlock));
+    // timeline.push(await practiceBlock(qBlock));
+    // timeline.push(await startBlock(qBlock));
+    // timeline.push(await hardBlock(qBlock));
+    timeline.push(await endBlock(qBlock));
 
 
     jsPsych.init({timeline: timeline});

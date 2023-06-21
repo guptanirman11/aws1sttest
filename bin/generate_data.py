@@ -24,6 +24,8 @@ db = dataset.connect(os.environ['DATABASE_URL'])
 # This is a temporary fix, when you fix the pssc task itself, you can get rid of it.
 max_trials = 3
 
+if not os.path.exists('files'):
+    os.mkdir('files')
 
 def zipdir(path, ziph):
     for dirname, subdirs, files in os.walk(path):

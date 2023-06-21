@@ -17,7 +17,11 @@ var JORELL_MASTER_OF_SCHEDULING = -1
 
 function getPID(){
     const params = new URLSearchParams(window.location.search)
-    return params.get('pr') + params.get('RID')
+    let rid = params.get('RID')
+    if (rid==undefined || rid==null || rid=="") {
+        rid = prompt("Please Enter Participant's RID (e.g. P2)")
+    }
+    return rid
 }
 
 const pid = getPID()
@@ -91,10 +95,10 @@ function saveData() {
     // Okay so this monstrosity is an artifact of jspsych's data model. In short, it checks every datapoint.
     // and translates it into english, it accomplishes this by referencing the custom data packet I gave all of these
     // items called "key". jspsych's key_press returns an int referencing a button on the computer. (Not necessarily a key on the keyboard btw.)
-    // jspsych's 'button_pressed' returns a key referencing the index of the button the player clicked. 
+    // jspsych's 'button_pressed' returns a key referencing the index of the button the player clicked.
 
     // Recap: 'key_press' returns a button, 'button_pressed' returns a key, I use a key (the other kind) to turn that nonsense into english.
-    
+
     // It's all very intuitive.
 
     for (let i in data) {
@@ -167,10 +171,10 @@ function objectMelt(target){
     /**
      * This is a helper function that goes through jspsych's data model and turns it into a NORMAL AJAX POST.
      * That way you don't have to spend any more time coding PHP than you need to. *Glares at jspsych docs.*
-     * 
+     *
      * Most of the items are set up so that they construct separate jspsych item objects for each trial. However,
      * because of the weird timing requirements of the ProcessingSpeed test, that one returns all three trials as one object,
-     * that's why this logic has two branches, to make it polymorphic enough to deal with that. 
+     * that's why this logic has two branches, to make it polymorphic enough to deal with that.
      */
 
     let output = [];
@@ -232,8 +236,8 @@ function testItemFinderVal(jsPsychData){
 }
 
 function testItemFinder(jsPsychData){
-    /** Input should be in the form of jsPsych.data.get(), so this works with .filterCustom() 
-     * This is set up so that you can POST after every item, and it'll just send the new stuff, to 
+    /** Input should be in the form of jsPsych.data.get(), so this works with .filterCustom()
+     * This is set up so that you can POST after every item, and it'll just send the new stuff, to
      * avoid doing a huge upsert everytime, instead it's doing a smol upsert every time.
     */
     if ('stored' in jsPsychData){
@@ -264,6 +268,8 @@ let ALL_NUMBERS_PLUS_BACKSPACE_AND_ENTER =
     [8, 13, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]
 
 let ALL_KEYS_BUT_ENTER = range(0, 222).filter(function(value){return value !== 13})
+
+let ONLY_SPACEBAR = [32]
 
 function imgLocStim(name){
     return '<img src="./img/' + name + '.jpg">'
@@ -305,7 +311,7 @@ async function EMDistractors() {
 async function EMWordStim(stimuli, choices, data){
     /**
      * The EMWordStim is pretty straight forward, it uses a standard plugin, so nothing too crazy.
-     * Although, it does use the distractors, which are a little wonk. 
+     * Although, it does use the distractors, which are a little wonk.
      */
     let task = {};
     let timeline = [];
@@ -349,7 +355,7 @@ async function EMObjectPicture(stimuli, choices, data){
     /**
      * This uses jspsych's built in button response, except it loads images into the buttons. It works pretty well.
      * Now with image preloading, so there's no weirdness on slow connections.
-     * 
+     *
      * Well still some weirdness but it's better than it was before.
      */
     let task = {};
@@ -393,7 +399,7 @@ async function EMObjectPicture(stimuli, choices, data){
     task['data'] = data;
     return task;
 }
-let colorChart = {R: '#F94D56',
+let colorChart = {R: '#FD2112', // prev red: #f94d56
         G: '#3D7B46',
         B: '#1495CC',
         O: '#E05200',
@@ -406,19 +412,19 @@ let colorChart = {R: '#F94D56',
 
 function drawRuleID(stimuli, scale) {
     /**
-     * This function draws the Rule ID stuff onto a canvas. However, <canvas> is a technology that 
+     * This function draws the Rule ID stuff onto a canvas. However, <canvas> is a technology that
      * apple invented about ten years ago, and has seen NO development since then, with all of
-     * the advancement going on with aliasing and shortcut packages. 
-     * 
+     * the advancement going on with aliasing and shortcut packages.
+     *
      * That is why it's 20 lines of code to draw a hexagon.
-     * 
+     *
      * If you think that's bad, it takes 1000 for vulkan to draw a triangle.
      * https://github.com/SaschaWillems/Vulkan/blob/master/examples/triangle/triangle.cpp
-     * 
+     *
      * (This is a rendering platform intended to replace directx at some point. We shall see.)
-     * 
+     *
      * A lot of this is weird geometry math that I thought I wouldn't see after middle school.
-     * 
+     *
      * It's all triggered by the shape codes, which are just the first letter of each shape's name.
      */
     let canvas = document.getElementById('ruleID');
@@ -514,7 +520,7 @@ function argMin(array) {
 function EFRuleID(stimuli, data){
     /**
      * Actually generating the RuleID stims. Basically it just calls that big rendering function from before
-     * some amount of times. 
+     * some amount of times.
      */
     let task = {};
 
@@ -616,7 +622,7 @@ function WMForwardDigitSpan(stimuli, delay, data){
     stimulus:'Rehearse the numbers in forward order. (first to last)',
     prompt: '<p style="font-size:32px">Press any key to continue...<p>'});
 
-        
+
     timeline.push({type: 'html-keyboard-response',
     stimulus:'Rehearse the numbers in forward order. (first to last)',
     trial_duration: 1000,
@@ -624,7 +630,7 @@ function WMForwardDigitSpan(stimuli, delay, data){
         choices: jsPsych.NO_KEYS
     });
     let trials = [...Array(stimuli.length).keys()];
-    
+
     for (let j in stimuli) {
 
         let numbers = stimuli[j].toString()
@@ -636,7 +642,7 @@ function WMForwardDigitSpan(stimuli, delay, data){
             repeats = ' repeats';
         }
         var numlen = numbers.length
-        
+
 
         data['stims_type'] = numlen + ' digits' + repeats;
         data['item_type'] = 'WMForwardDigitSpan';
@@ -656,21 +662,21 @@ function WMForwardDigitSpan(stimuli, delay, data){
             stimulus: '<p style="font-size: 120px">+</p>',
             choices: jsPsych.NO_KEYS, trial_duration: delay
         });
-        
+
         timeline.push({
             type: 'string-entry',
             prompt: '<p>Type the numbers in forward order (first to last), press enter/return to send.</p>',
             answer: stimuli[j].toString(),
             choices: ALL_NUMBERS_PLUS_BACKSPACE_AND_ENTER,
             entry_size: 100,
-            trial_duration: null,
+            trial_duration: 100000,
             data: {...storeDataTag, ...data}
         });
 
         timeline.push({
             type: 'html-keyboard-response',
             stimulus: 'Press space to continue...',
-            choices: ALL_KEYS_BUT_ENTER
+            choices: ONLY_SPACEBAR
         })
 
 
@@ -695,7 +701,7 @@ function WMBackwardDigitSpan(stimuli, delay, data){
     timeline.push({type: 'html-keyboard-response',
         stimulus:'Rehearse the numbers in reverse order. (last to first)',
         prompt: '<p style="font-size:32px">Press any key to continue...<p>'});
-    
+
         timeline.push({type: 'html-keyboard-response',
         stimulus:'Rehearse the numbers in reverse order. (last to first)',
         trial_duration: 1000,
@@ -707,7 +713,7 @@ function WMBackwardDigitSpan(stimuli, delay, data){
         let splitNumbers = numbers.split("");
         let reverseArray = splitNumbers.reverse();
         let reverseNumbers = reverseArray.join("")
-        
+
         if(countUnique(numbers) === numbers.length){
             // noinspection JSDuplicatedDeclaration
             repeats = ' no repeats';
@@ -738,16 +744,16 @@ function WMBackwardDigitSpan(stimuli, delay, data){
             answer: stimuli[j].toString(),
             choices: ALL_NUMBERS_PLUS_BACKSPACE_AND_ENTER,
             entry_size: 100,
-            trial_duration: null,
+            trial_duration: 100000,
             data: {...storeDataTag, ...data}});
 
-        
+
         timeline.push({
             type: 'html-keyboard-response',
             stimulus: 'Press space to continue...',
-            choices: ALL_KEYS_BUT_ENTER
+            choices: ONLY_SPACEBAR
         })
-        
+
 
 
     }
@@ -785,7 +791,7 @@ function EFStroop(stimuli, delay, data) {
         possibleKeys = possibleKeys.concat(Array(stimulus.length + 1).fill(96).map((x, y) => x + y));
         let correctAnswer = 0
         let stimLines = [];
-        
+
         for (const i in stimulus) {
             // Go through and tack the word on to the list.
             let word = stimulus[i].split('.')
@@ -816,7 +822,7 @@ function EFStroop(stimuli, delay, data) {
 
         timeline.push({
             type: 'categorize-html',
-            stimulus: 'How many words had matching color?',
+            stimulus: 'How many words matched their own ink color?',
             prompt: choicePrompt,
             choices: possibleKeys,
             key_answer: 999,
@@ -840,7 +846,7 @@ function EFStroop(stimuli, delay, data) {
 }
 
 function PSStringComparison(stimuli, delay, data) {
-    // Again, most of the important stuff is going on in the plugin file, but essentially this 
+    // Again, most of the important stuff is going on in the plugin file, but essentially this
     // task works in a very different way than the others. The others all run the same plugin multiple
     // times but this one runs one plugin that has multiple inputs. This is a terrible way of doing things
     // but it's what we are stuck with due to JSPSych limitations.
@@ -878,16 +884,23 @@ function PSStringComparison(stimuli, delay, data) {
     stimuli_2: stimuli_2,
     choices: q_p,
     time_limit: delay,
+    post_trial_gap: 1000,
     prompt: '<div class="container bottom"> <div>Same - Q</div><div>&nbsp;</div><div>Different - P</div></div>',
     data: {...storeDataTag, ...data}})
 
+    // timeline.push({ //  inter-trial delay
+    //   type: 'html-keyboard-response',
+    //   choices: jsPsych.NO_KEYS,
+    //   trial_duration: 1000
+    // })
 
     timeline.push({
         type: 'call-function',
         func: saveData
     })
+
     task['timeline'] = timeline;
-    
+
     task['data'] = data;
     return task;
 }
@@ -906,7 +919,7 @@ function EMLongTerm(stimuli, choices, data){
         data['trial'] = i;
         timeline.push({
             type: 'html-button-response',
-            stimulus: "Which did you memorize before?", 
+            stimulus: "Which did you memorize before?",
             choices: rechoice,
             data: {...storeDataTag, ...data}
         });
@@ -924,7 +937,7 @@ function EMLongTerm(stimuli, choices, data){
 }
 
 function endSurvey(question, data){
-    // This is the object for running one of the questions in the metacognitive questionnaire. 
+    // This is the object for running one of the questions in the metacognitive questionnaire.
     let task = {};
     let timeline = [];
     let options = ['Substantially Worse', 'Much Worse', 'Slightly Worse', 'Average', 'Slightly Better', 'Much Better', 'Substantially Better']
@@ -932,11 +945,42 @@ function endSurvey(question, data){
     for(const i in options){
         formoptions.push('<p style="font-size:32px; line-height: 32px">' + options[i] + '</p>')
     }
-    
+
     data['item_type'] = "End of Experiment Survey";
     data['answer'] = 'None';
     data['trial'] = 0;
-    
+
+    timeline.push({type: 'survey-likert',
+    questions: [{prompt: '<p style="font-size:48px">' + question[0] + '</p>',
+                labels: formoptions,
+                required: true}],
+    data: {...storeDataTag, ...data}})
+
+    task['timeline'] = timeline;
+
+    timeline.push({
+        type: 'call-function',
+        func: saveData
+    })
+
+    task['data'] = data;
+    return task;
+}
+
+function startSurvey(question, data){
+    // This is the object for running one of the questions in the metacognitive questionnaire.
+    let task = {};
+    let timeline = [];
+    let options = ['Substantially Worse', 'Much Worse', 'Slightly Worse', 'Average', 'Slightly Better', 'Much Better', 'Substantially Better']
+    let formoptions = []
+    for(const i in options){
+        formoptions.push('<p style="font-size:32px; line-height: 32px">' + options[i] + '</p>')
+    }
+
+    data['item_type'] = "Start of Experiment Survey";
+    data['answer'] = 'None';
+    data['trial'] = 0;
+
     timeline.push({type: 'survey-likert',
     questions: [{prompt: '<p style="font-size:48px">' + question[0] + '</p>',
                 labels: formoptions,

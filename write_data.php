@@ -27,6 +27,8 @@ try{
     ));
     // The access object
     foreach ($data_array as $name => $data){
+        $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
+
         foreach ($data as $result){
             $colnames = [];
             $colvals = [];

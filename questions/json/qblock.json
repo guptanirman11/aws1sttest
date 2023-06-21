@@ -1,4 +1,104 @@
 {
+  "SS01": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Recalling new names, places, or grocery lists."
+      ],
+      "taskNum": "ES01",
+      "trials": []
+  },
+  "SS02": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Remembering that you\u2019ve already told someone a story."
+      ],
+      "taskNum": "SS02",
+      "trials": []
+  },
+  "SS03": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Knowing the meaning of uncommon words."
+      ],
+      "taskNum": "SS03",
+      "trials": []
+  },
+  "SS04": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Identifying common objects."
+      ],
+      "taskNum": "SS04",
+      "trials": []
+  },
+  "SS05": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Rehearsing phone numbers or directions."
+      ],
+      "taskNum": "SS05",
+      "trials": []
+  },
+  "SS06": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Multi-tasking (e.g. cooking while talking)."
+      ],
+      "taskNum": "SS06",
+      "trials": []
+  },
+  "SS07": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Paying close attention (e.g. reading in a noisy room)."
+      ],
+      "taskNum": "SS07",
+      "trials": []
+  },
+  "SS08": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Learning new tasks (e.g. new card games)."
+      ],
+      "taskNum": "SS08",
+      "trials": []
+  },
+  "SS09": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Reacting quickly (e.g. hitting the brakes when driving.)"
+      ],
+      "taskNum": "SS09",
+      "trials": []
+  },
+  "SS10": {
+      "difficulty": "surveyB",
+      "kind": "startSurvey",
+      "stimsType": "",
+      "stimuli": [
+          "Performing speeded tasks."
+      ],
+      "taskNum": "SS10",
+      "trials": []
+  },
     "1": {
         "difficulty": "easy",
         "kind": "EMWordStim",
@@ -1175,36 +1275,12 @@
         "taskNum": "412",
         "trials": []
     },
-    "413": {
-        "difficulty": "medium",
-        "kind": "WMForwardDigitSpan",
-        "stimsType": "1s",
-        "stimuli": [
-            "71485329",
-            "34187256",
-            "32458961"
-        ],
-        "taskNum": "413",
-        "trials": []
-    },
     "414": {
         "difficulty": "",
         "kind": "WMForwardDigitSpan",
         "stimsType": "1s",
         "stimuli": [],
         "taskNum": "414",
-        "trials": []
-    },
-    "415": {
-        "difficulty": "hard",
-        "kind": "WMForwardDigitSpan",
-        "stimsType": "1s",
-        "stimuli": [
-            "4855379321",
-            "3167948375",
-            "1837524169"
-        ],
-        "taskNum": "415",
         "trials": []
     },
     "416": {
@@ -1309,18 +1385,6 @@
         "stimsType": "5s",
         "stimuli": [],
         "taskNum": "445",
-        "trials": []
-    },
-    "446": {
-        "difficulty": "medium",
-        "kind": "WMForwardDigitSpan",
-        "stimsType": "5s",
-        "stimuli": [
-            "5217968",
-            "3418725",
-            "9652781"
-        ],
-        "taskNum": "446",
         "trials": []
     },
     "447": {
@@ -1435,18 +1499,6 @@
         "taskNum": "459",
         "trials": []
     },
-    "460": {
-        "difficulty": "hard",
-        "kind": "WMBackwardDigitSpan",
-        "stimsType": "1s",
-        "stimuli": [
-            "729531",
-            "462359",
-            "853196"
-        ],
-        "taskNum": "460",
-        "trials": []
-    },
     "461": {
         "difficulty": "",
         "kind": "WMBackwardDigitSpan",
@@ -1461,18 +1513,6 @@
         "stimsType": "1s",
         "stimuli": [],
         "taskNum": "462",
-        "trials": []
-    },
-    "463": {
-        "difficulty": "hard",
-        "kind": "WMBackwardDigitSpan",
-        "stimsType": "1s",
-        "stimuli": [
-            "43796281",
-            "15968732",
-            "37629814"
-        ],
-        "taskNum": "463",
         "trials": []
     },
     "464": {
@@ -3261,16 +3301,6 @@
             "Performing speeded tasks."
         ],
         "taskNum": "ES10",
-        "trials": []
-    },
-    "ES11": {
-        "difficulty": "survey",
-        "kind": "endSurvey",
-        "stimsType": "",
-        "stimuli": [
-            "question placeholder"
-        ],
-        "taskNum": "ES11",
         "trials": []
     },
     "PSSCP": {
