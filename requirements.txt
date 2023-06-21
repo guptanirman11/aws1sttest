@@ -1,0 +1,6 @@
+flask
+dataset
+gunicorn
+psycopg2
+pandas
+boxsdk

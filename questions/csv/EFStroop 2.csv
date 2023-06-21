@@ -1,0 +1,52 @@
+taskNum,stim1,stim2,stim3,stim4,stim5,stim6,trial1,trial2,trial3,stimsType,difficulty
+EFSTP,Black.G  Green.R  Purple.P,,,,,,,,,3s,practice
+601,Red.R  Green.R  Black.K,Black.R   Red.R   Yellow.Y,Purple.P  Green.R  Red.G,,,,,,,3s,easy
+602,,,,,,,,,,3s,
+603,,,,,,,,,,3s,
+604,,,,,,,,,,3s,
+605,Green.G  Yellow.Y   Red.R  Purple.R,Green.Y  Red.P  Yellow.Y  Red.R,Purple.Y  Red.P   Green.G  Yellow.Y,,,,,,,3s,medium
+606,Green.R Yellow.P Red.R,Green.R Yellow.P Red.R,Green.R Yellow.P Red.R,,,,,,,3s,
+607,,,,,,,,,,3s,
+608,,,,,,,,,,3s,
+609,Yellow.Y  Green.G  Red.R  Purple.P  Yellow.Y,Green.R   Red.G  Red.R  Green.G  Purple.Y,Black.K    Yellow.K   Green.Y   Purple.P  Yellow.Y,,,,,,,3s,medium
+610,,,,,,,,,,3s,
+611,,,,,,,,,,3s,
+612,,,,,,,,,,3s,
+613,,,,,,,,,,3s,
+614,,,,,,,,,,3s,
+615,,,,,,,,,,3s,
+616,yellow.G black.K green.G red.P green.G yellow.P,red.R red.G purple.P yellow.K black.R black.P,green.G black.Y black.P green.P yellow.Y black.K,,,,,,,3s,
+617,Green.G  Yellow.K  Purple.P  Black.K  Red.R  Yellow.R,Purple.K  Yellow.K  Yellow.Y  Red.P  Green.Y  Red.R,Green.K   Red.G   Black.P  Purple.K  Yellow.R  Green.K,,,,,,,3s,hard
+618,Red.P Green.R Black.K,Black.G Red.R Yellow.K,Purple.G Green.R Red.G,,,,,,,4s,
+619,,,,,,,,,,4s,
+620,,,,,,,,,,4s,
+621,,,,,,,,,,4s,
+622,,,,,,,,,,4s,
+623,,,,,,,,,,4s,
+624,,,,,,,,,,4s,
+625,,,,,,,,,,4s,
+626,Black.K   Green.G  Red.K   Black.K  Purple.G,Yellow.K   Green.K   Yellow.Y  Red.K  Red.R,Yellow.Y   Purple.R  Purple.P  Green.K  Green.G,,,,,,,4s,medium
+627,,,,,,,,,,4s,
+628,,,,,,,,,,4s,
+629,Purple.P  Green.R  Red.R  Red.G  Yellow.P,Purple.Y  Red.G  Red.K  Black.R  Black.P,Yellow.P  Purple.P  Green.P  Red.G  Red.R,,,,,,,4s,hard
+630,Green.G   Red.G   Green.R   Yellow.Y  Yellow.K  Black.K,Green.R  Red.K  Red.R  Yellow.Y   Yellow.K  Yellow.Y,Red.K  Red.R   Green.R  Purple.P  Purple.K  Yellow.R,,,,,,,4s,hard
+631,,,,,,,,,,4s,
+632,,,,,,,,,,4s,
+633,,,,,,,,,,4s,
+634,,,,,,,,,,4s,
+635,Green.G  Black.P  Red.R,Yellow.K  Purple.R  Green.K,Black.R   Black.K  Black.K,,,,,,,5s,easy
+636,,,,,,,,,,5s,
+637,,,,,,,,,,5s,
+638,red.G purple.G black.K purple.K,green.G black.G purple.P black.R,green.K red.R purple.G green.G,,,,,,,5s,
+639,,,,,,,,,,5s,
+640,,,,,,,,,,5s,
+641,,,,,,,,,,5s,
+642,Black.G   Purple.G   Green.G  Red.K  Yellow.Y,Yellow.K   Black.G   Purple.P  Red.R  Black.K,Green.K   Green.R  Green.G   Purple.P  Purple.R,,,,,,,5s,easy
+643,,,,,,,,,,5s,
+644,,,,,,,,,,5s,
+645,,,,,,,,,,5s,
+646,,,,,,,,,,5s,
+647,,,,,,,,,,5s,
+648,,,,,,,,,,5s,
+649,,,,,,,,,,5s,
+650,,,,,,,,,,5s,

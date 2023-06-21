@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/src",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "coen",
+      "email": "coen@uchicago.edu"
+    }
+  ],
+  "require": {
+  }
+}

@@ -1,0 +1,9 @@
+#! bin/bash
+
+rm -r tmp
+
+mkdir tmp
+mkdir tmp/files
+mkdir tmp/files/by_subject
+
+python bin/generate.py
