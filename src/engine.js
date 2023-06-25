@@ -432,7 +432,7 @@ async function main() {
 
     // timeline.push(await practiceBlock(qBlock));
     // timeline.push(await startBlock(qBlock));
-    stimeline.push(await hardBlock(qBlock));
+    timeline.push(await hardBlock(qBlock));
     // timeline.push(await endBlock(qBlock));
 
 
