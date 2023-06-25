@@ -1,10 +1,10 @@
 <?php
-
+echo "Hello world";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$db = parse_url(getenv("DATABASE_URL"));
+// $db = parse_url(getenv("DATABASE_URL"));
 
 // Heroku handles the connstring part of this. 
 // Presumably our credentials are safe so we needn't take any safety measures here?
@@ -21,14 +21,34 @@ function console_log($output, $with_script_tags = true) {
 }
 
 try{
-    $pdo = new PDO("pgsql:" . sprintf(
-        "host=%s;port=%s;user=%s;password=%s;dbname=%s",
-        $db["host"],
-        $db["port"],
-        $db["user"],
-        $db["pass"],
-        ltrim($db["path"], "/")
-    ));
+    // $pdo = new PDO("pgsql:" . sprintf(
+    //     "host=%s;port=%s;user=%s;password=%s;dbname=%s",
+    //     $db["host"],
+    //     $db["port"],
+    //     $db["user"],
+    //     $db["pass"],
+    //     ltrim($db["path"], "/")
+    // ));
+
+    $dbhost = $_SERVER['RDS_HOSTNAME'];
+    $dbport = $_SERVER['RDS_PORT'];
+    $dbname = $_SERVER['RDS_DB_NAME'];
+    $charset = 'utf8' ;
+
+    $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname};charset={$charset}";
+    $username = $_SERVER['RDS_USERNAME'];
+    $password = $_SERVER['RDS_PASSWORD'];
+
+    $pdo = new PDO($dsn, $username, $password);
+
+    // $db_host = getenv("RDS_HOSTNAME");
+    // $db_port = getenv("RDS_PORT");
+    // $db_name = getenv("RDS_DB_NAME");
+    // $db_user = getenv("RDS_USERNAME");
+    // $db_pass = getenv("RDS_PASSWORD");
+
+    // $pdo = new PDO("pgsql:host=$db_host;port=$db_port;dbname=$db_name", $db_user, $db_pass);
+    // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // The access object
     foreach ($data_array as $name => $data){
         $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
@@ -64,6 +84,7 @@ try{
             }
         }
     }
+    console_log("Data inserted successfully");
 
 } catch(\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
