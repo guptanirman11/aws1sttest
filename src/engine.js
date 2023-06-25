@@ -431,9 +431,9 @@ async function main() {
 
 
     // timeline.push(await practiceBlock(qBlock));
-    // timeline.push(await startBlock(qBlock));
+    timeline.push(await startBlock(qBlock));
     // timeline.push(await hardBlock(qBlock));
-    timeline.push(await endBlock(qBlock));
+    // timeline.push(await endBlock(qBlock));
 
 
     jsPsych.init({timeline: timeline});
