@@ -86,7 +86,7 @@ function saveData() {
      * I dunno man it just works.
      */
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/write_data.php');
+    xhr.open('POST', '../write_data.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
     data = JSON.parse(jsPsych.data.get().filterCustom(testItemFinder).json())
     try{LAST_UPLOAD = data[data.length - 1].trial_index;}
@@ -135,7 +135,7 @@ function validateData() {
      * which was missed the first time.
      */
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/write_data.php');
+    xhr.open('POST', '../write_data.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
     data = JSON.parse(jsPsych.data.get().filterCustom(testItemFinderVal).json())
 
