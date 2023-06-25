@@ -39,7 +39,16 @@ try{
     $username = $_SERVER['RDS_USERNAME'];
     $password = $_SERVER['RDS_PASSWORD'];
 
-    $pdo = new PDO($dsn, $username, $password);
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_STRINGIFY_FETCHES => false
+    ];
+    $pdo = new PDO($dsn, $username, $password, $options);
+
+    // $pdo = new PDO($dsn, $username, $password);
 
     // $db_host = getenv("RDS_HOSTNAME");
     // $db_port = getenv("RDS_PORT");
