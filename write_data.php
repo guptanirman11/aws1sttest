@@ -31,14 +31,14 @@ try{
     //     ltrim($db["path"], "/")
     // ));
 
-    // $dbhost = $_SERVER['RDS_HOSTNAME'];
-    // $dbport = $_SERVER['RDS_PORT'];
-    // $dbname = $_SERVER['RDS_DB_NAME'];
-    // // $charset = 'utf8' ;
+    $dbhost = $_SERVER['RDS_HOSTNAME'];
+    $dbport = $_SERVER['RDS_PORT'];
+    $dbname = $_SERVER['RDS_DB_NAME'];
+    // $charset = 'utf8' ;
 
-    // $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname}";
-    // $username = $_SERVER['RDS_USERNAME'];
-    // $password = $_SERVER['RDS_PASSWORD'];
+    $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname}";
+    $username = $_SERVER['RDS_USERNAME'];
+    $password = $_SERVER['RDS_PASSWORD'];
 
     // $options = [
     //     // PDO::PGSQL_ATTR_AUTHENTICATION => PDO::PGSQL_AUTH_MD5
@@ -48,8 +48,8 @@ try{
     //     PDO::ATTR_PERSISTENT => true,
     //     PDO::ATTR_STRINGIFY_FETCHES => false
     // ];
-    // $pdo = new PDO($dsn, $username, $password, $options);
-    $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
+    $pdo = new PDO($dsn, $username, $password, $options);
+    // $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     // $pdo = new PDO($dsn, $username, $password);
 
