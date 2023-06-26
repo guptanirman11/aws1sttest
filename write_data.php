@@ -35,7 +35,7 @@ try{
     $dbname = $_SERVER['RDS_DB_NAME'];
     // $charset = 'utf8' ;
 
-    // $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname}";
+    $dsn = "pgsql:host={$dbhost};port={$dbport};dbname={$dbname}";
     $username = $_SERVER['RDS_USERNAME'];
     $password = $_SERVER['RDS_PASSWORD'];
 
