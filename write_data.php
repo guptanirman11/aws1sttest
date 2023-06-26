@@ -31,11 +31,11 @@ try{
     //     ltrim($db["path"], "/")
     // ));
 
-    $db_host = $_SERVER"RDS_HOSTNAME";
-    $db_port = $_SERVER("RDS_PORT");
-    $db_name = $_SERVER("RDS_DB_NAME");
-    $db_user = $_SERVER("RDS_USERNAME");
-    $db_pass = $_SERVER("RDS_PASSWORD");
+    $db_host = $_SERVER["RDS_HOSTNAME"];
+    $db_port = $_SERVER["RDS_PORT"];
+    $db_name = $_SERVER["RDS_DB_NAME"];
+    $db_user = $_SERVER["RDS_USERNAME"];
+    $db_pass = $_SERVER["RDS_PASSWORD"];
 
     $pdo = new PDO("mysql:host=$db_host;port=$db_port;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
