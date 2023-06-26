@@ -39,15 +39,16 @@ try{
     $username = $_SERVER['RDS_USERNAME'];
     $password = $_SERVER['RDS_PASSWORD'];
 
-    // $options = [
-    //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    //     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    //     PDO::ATTR_EMULATE_PREPARES => false,
-    //     PDO::ATTR_PERSISTENT => true,
-    //     PDO::ATTR_STRINGIFY_FETCHES => false
-    // ];
-    // $pdo = new PDO($dsn, $username, $password, $options);
-    $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
+    $options = [
+        PDO::PGSQL_ATTR_AUTHENTICATION => PDO::PGSQL_AUTH_MD5
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_STRINGIFY_FETCHES => false
+    ];
+    $pdo = new PDO($dsn, $username, $password, $options);
+    // $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     // $pdo = new PDO($dsn, $username, $password);
 
