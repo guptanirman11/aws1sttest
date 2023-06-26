@@ -41,7 +41,21 @@ try{
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
-    echo "connection established";
+
+    $query = "SELECT 1";
+    $result = $link->query($query);
+    
+    if ($result !== false) {
+        // Connection and query execution were successful
+        console_log("Connection to the database established successfully");
+        
+        // Continue with your data insertion logic here
+        
+        // ...
+    } else {
+        // Connection or query execution failed
+        console_log("Failed to connect to the database or execute query");
+    }
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
