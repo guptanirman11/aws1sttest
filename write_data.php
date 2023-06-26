@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 // Presumably our credentials are safe so we needn't take any safety measures here?
 
 $data_array = json_decode(file_get_contents("php://input"), true);
-console_log($data_array)
+// console_log($data_array)
 
 function console_log($output, $with_script_tags = true) {
     $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
