@@ -58,12 +58,12 @@ try{
     $db_user = getenv("RDS_USERNAME");
     $db_pass = getenv("RDS_PASSWORD");
 
-    $pdo = new PDO("pgsql:host=$db_host;port=$db_port;dbname=$db_name", $db_user, $db_pass);
+    $pdo = new PDO("mysql:host=$db_host;port=$db_port;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // The access object
     foreach ($data_array as $name => $data){
-        $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-
+        // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
+        $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=pid");
         foreach ($data as $result){
             $colnames = [];
             $colvals = [];
@@ -74,22 +74,25 @@ try{
                     $colname = substr($col, 0, -1);
                     $dpoint = round($dpoint);
                     $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
-                    $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                    // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                    $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                     console_log($dpoint, $with_script_tags=FALSE);
                 } else if(substr($col, -1) === 'R'){
                     // The subject response
                     $ctype = 'text';
                     $colname = substr($col, 0, -1);
                     $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
-                    $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                    $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                    // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                 } else if(substr($col, -1) === 'O'){
                     // The ordering number that shows in which order the subject saw each task.
                     $ctype = 'integer';
                     $colname = substr($col, 0, -1);
                     $dpoint = round($dpoint);
                     $pdo->query("ALTER TABLE ordering ADD COLUMN IF NOT EXISTS $colname $ctype");
-                    $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
-
+                    // $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                    $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                    
                 }
 
             }
