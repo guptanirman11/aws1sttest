@@ -48,7 +48,7 @@ try{
     //     PDO::ATTR_PERSISTENT => true,
     //     PDO::ATTR_STRINGIFY_FETCHES => false
     // ];
-    $pdo = new PDO($dsn, $username, $password, $options);
+    $pdo = new PDO($dsn, $username, $password);
     // $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     // $pdo = new PDO($dsn, $username, $password);
