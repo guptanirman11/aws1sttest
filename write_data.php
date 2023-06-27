@@ -22,15 +22,7 @@ function console_log($output, $with_script_tags = true) {
 }
 
 try{
-    // $pdo = new PDO("pgsql:" . sprintf(
-    //     "host=%s;port=%s;user=%s;password=%s;dbname=%s",
-    //     $db["host"],
-    //     $db["port"],
-    //     $db["user"],
-    //     $db["pass"],
-    //     ltrim($db["path"], "/")
-    // ));
-
+    // Creating the connection between aws rds instance in order to add the responses using AJAX Call.
     $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     // Create the required tables if they do not exist
@@ -39,13 +31,14 @@ try{
     $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT, colname TEXT)");
     $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT, colname TEXT)");
     
+    // Dummy value to check if the connection is perfect or not 
     try {
         // Insert a record with pid = 21 into the timeofaction table
-        $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
+        $insertQuery = "INSERT INTO timeofaction (pid) VALUES ('11')";
         $pdo->query($insertQuery);
     
         // Fetch the record with pid = 21
-        $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
+        $selectQuery = "SELECT * FROM timeofaction WHERE pid = '11'";
         $result = $pdo->query($selectQuery);
     
         if ($result !== false) {
@@ -63,7 +56,7 @@ try{
         }
     
         // Delete the record with pid = 11
-        $deleteQuery = "DELETE FROM timeofaction WHERE pid IN (21,11)";
+        $deleteQuery = "DELETE FROM timeofaction WHERE pid IN ('21','11')";
         $pdo->query($deleteQuery);
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
