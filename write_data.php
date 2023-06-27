@@ -56,11 +56,11 @@ try{
     
     try {
         // Insert a record with pid = 21 into the timeofaction table
-        $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
-        $pdo->query($insertQuery);
+        // $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
+        // $pdo->query($insertQuery);
     
         // Fetch the record with pid = 21
-        $selectQuery = "SELECT * FROM timeofaction WHERE pid = 21";
+        $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
         $result = $pdo->query($selectQuery);
     
         if ($result !== false) {
@@ -78,7 +78,7 @@ try{
         }
     
         // Delete the record with pid = 21
-        $deleteQuery = "DELETE FROM timeofaction WHERE pid = 21";
+        $deleteQuery = "DELETE FROM timeofaction WHERE pid = 11";
         $pdo->query($deleteQuery);
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
