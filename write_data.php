@@ -40,10 +40,10 @@ try{
     // $pdo = new PDO("mysql:host=$db_host;port=$db_port;dbname=$db_name", $db_user, $db_pass);
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $link = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
+    $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     $query = "SELECT 1";
-    $result = $link->query($query);
+    $result = $pdo->query($query);
     
     if ($result !== false) {
         // Connection and query execution were successful
@@ -56,6 +56,13 @@ try{
         // Connection or query execution failed
         console_log("Failed to connect to the database or execute query");
     }
+    console_log($result);
+    // Create the required tables if they do not exist
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid INT PRIMARY KEY)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid INT, colname INT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid INT, colname TEXT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid INT, colname INT)");
+    
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
