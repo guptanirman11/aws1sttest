@@ -33,58 +33,42 @@ try{
 
     $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
-    // $query = "SELECT 1";
-    // $result = $pdo->query($query);
-    
-    // if ($result !== false) {
-    //     // Connection and query execution were successful
-    //     console_log("Connection to the database established successfully");
-        
-    //     // Continue with your data insertion logic here
-        
-    //     // ...
-    // } else {
-    //     // Connection or query execution failed
-    //     console_log("Failed to connect to the database or execute query");
-    // }
-    // console_log($result);
     // Create the required tables if they do not exist
-    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid INT PRIMARY KEY)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid INT, colname INT)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid INT, colname TEXT)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid INT, colname INT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid TEXT PRIMARY KEY)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid TEXT, colname TEXT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT, colname TEXT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT, colname TEXT)");
     
     try {
         // Insert a record with pid = 21 into the timeofaction table
-        // $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
-        // $pdo->query($insertQuery);
+        $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
+        $pdo->query($insertQuery);
     
         // Fetch the record with pid = 21
-        // $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
-        // $result = $pdo->query($selectQuery);
+        $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
+        $result = $pdo->query($selectQuery);
     
-        // if ($result !== false) {
-        //     // Fetch the row
-        //     $row = mysqli_fetch_assoc($result);
+        if ($result !== false) {
+            // Fetch the row with mysqli fetch method
+            $row = mysqli_fetch_assoc($result);
     
-        //     if ($row) {
-        //         // Log the fetched record to the console
-        //         console_log($row);
-        //     } else {
-        //         console_log("Record with pid = 11 not found");
-        //     }
-        // } else {
-        //     console_log("Failed to execute the fetch query");
-        // }
+            if ($row) {
+                // Log the fetched record to the console
+                console_log($row);
+            } else {
+                console_log("Record with pid = 11 not found");
+            }
+        } else {
+            console_log("Failed to execute the fetch query");
+        }
     
-        // Delete the record with pid = 21
+        // Delete the record with pid = 11
         $deleteQuery = "DELETE FROM timeofaction WHERE pid IN (21,11)";
         $pdo->query($deleteQuery);
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
     }
     
-
 
 
     // The access object
