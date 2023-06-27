@@ -56,7 +56,7 @@ try{
     
     try {
         // Insert a record with pid = 21 into the timeofaction table
-        $insertQuery = "INSERT INTO timeofaction (pid) VALUES (21)";
+        $insertQuery = "INSERT INTO timeofaction (pid) VALUES (11)";
         $pdo->query($insertQuery);
     
         // Fetch the record with pid = 21
