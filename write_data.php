@@ -60,25 +60,25 @@ try{
         // $pdo->query($insertQuery);
     
         // Fetch the record with pid = 21
-        $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
-        $result = $pdo->query($selectQuery);
+        // $selectQuery = "SELECT * FROM timeofaction WHERE pid = 11";
+        // $result = $pdo->query($selectQuery);
     
-        if ($result !== false) {
-            // Fetch the row
-            $row = mysqli_fetch_assoc($result);
+        // if ($result !== false) {
+        //     // Fetch the row
+        //     $row = mysqli_fetch_assoc($result);
     
-            if ($row) {
-                // Log the fetched record to the console
-                console_log($row);
-            } else {
-                console_log("Record with pid = 21 not found");
-            }
-        } else {
-            console_log("Failed to execute the fetch query");
-        }
+        //     if ($row) {
+        //         // Log the fetched record to the console
+        //         console_log($row);
+        //     } else {
+        //         console_log("Record with pid = 11 not found");
+        //     }
+        // } else {
+        //     console_log("Failed to execute the fetch query");
+        // }
     
         // Delete the record with pid = 21
-        $deleteQuery = "DELETE FROM timeofaction WHERE pid = 11";
+        $deleteQuery = "DELETE FROM timeofaction WHERE pid IN (21,11)";
         $pdo->query($deleteQuery);
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
