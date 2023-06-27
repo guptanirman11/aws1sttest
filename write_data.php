@@ -65,7 +65,7 @@ try{
     
         if ($result !== false) {
             // Fetch the row
-            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $row = mysqli_fetch_assoc($result);
     
             if ($row) {
                 // Log the fetched record to the console
