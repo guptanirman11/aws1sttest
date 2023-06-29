@@ -26,10 +26,10 @@ try{
     // $pdo->query("DROP TABLE IF EXISTS ordering");
 
     // Create the required tables if they do not exist
-    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid TEXT UNIQUE)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid TEXT UNIQUE)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT UNIQUE)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid TEXT(255) UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid TEXT(255) UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT(255) UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT(255) UNIQUE)");
     
     // Dummy value to check if the connection is perfect or not 
    
