@@ -45,7 +45,7 @@ try{
                         $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
-                        console_log($dpoint, $with_script_tags=FALSE);
+                        error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'R'){
                         // The subject response
                         $ctype = 'text';
@@ -53,6 +53,7 @@ try{
                         $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
                         $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                        error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'O'){
                         // The ordering number that shows in which order the subject saw each task.
                         $ctype = 'integer';
