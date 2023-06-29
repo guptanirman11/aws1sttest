@@ -67,7 +67,7 @@ try{
                 }
             }
         }
-        console_log("Data inserted successfully");
+        error_log("Data inserted successfully");
     }
 
 } catch(\PDOException $e) {
