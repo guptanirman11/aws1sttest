@@ -430,9 +430,9 @@ async function main() {
     let qBlock = await loadQuestions();
 
 
-    timeline.push(await practiceBlock(qBlock));
+    // timeline.push(await practiceBlock(qBlock));
     // timeline.push(await startBlock(qBlock));
-    // timeline.push(await hardBlock(qBlock));
+    timeline.push(await hardBlock(qBlock));
     // timeline.push(await endBlock(qBlock));
 
 
