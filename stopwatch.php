@@ -1,19 +1,21 @@
 <?php
 
-$db = parse_url(getenv("DATABASE_URL"));
+// $db = parse_url(getenv("DATABASE_URL"));
 
 $data_array = json_decode(file_get_contents("php://input"));
 
 
 try{
-    $pdo = new PDO("pgsql:" . sprintf(
-        "host=%s;port=%s;user=%s;password=%s;dbname=%s",
-        $db["host"],
-        $db["port"],
-        $db["user"],
-        $db["pass"],
-        ltrim($db["path"], "/")
-    ));
+    // $pdo = new PDO("pgsql:" . sprintf(
+    //     "host=%s;port=%s;user=%s;password=%s;dbname=%s",
+    //     $db["host"],
+    //     $db["port"],
+    //     $db["user"],
+    //     $db["pass"],
+    //     ltrim($db["path"], "/")
+    // ));
+    $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
+
 
     $time = $data_array->time;
     $pid = $data_array->pid;
