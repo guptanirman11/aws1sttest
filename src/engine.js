@@ -40,7 +40,7 @@ function sleep(milliseconds) {
 function endTimer() {
     // This is to send data to the stopwatch php script that sends whole-times to the database.
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'stopwatch.php');
+    xhr.open('POST', '../stopwatch.php');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     let packet = {

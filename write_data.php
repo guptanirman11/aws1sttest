@@ -4,11 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// $db = parse_url(getenv("DATABASE_URL"));
-
-// Heroku handles the connstring part of this. 
-// Presumably our credentials are safe so we needn't take any safety measures here?
-
 $data_array = json_decode(file_get_contents("php://input"), true);
 // console_log($data_array)
 
@@ -32,38 +27,7 @@ try{
     $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT, colname TEXT)");
     
     // Dummy value to check if the connection is perfect or not 
-    try {
-        // Insert a record with pid = 21 into the timeofaction table
-        $insertQuery = "INSERT INTO timeofaction (pid) VALUES ('11')";
-        $pdo->query($insertQuery);
-    
-        // Fetch the record with pid = 21
-        $selectQuery = "SELECT * FROM timeofaction WHERE pid = '11'";
-        $result = $pdo->query($selectQuery);
-    
-        if ($result !== false) {
-            // Fetch the row with mysqli fetch method
-            $row = mysqli_fetch_assoc($result);
-    
-            if ($row) {
-                // Log the fetched record to the console
-                console_log($row);
-            } else {
-                console_log("Record with pid = 11 not found");
-            }
-        } else {
-            console_log("Failed to execute the fetch query");
-        }
-    
-        // Delete the record with pid = 11
-        $deleteQuery = "DELETE FROM timeofaction WHERE pid IN ('21','11')";
-        $pdo->query($deleteQuery);
-    } catch (\PDOException $e) {
-        throw new \PDOException($e->getMessage(), (int)$e->getCode());
-    }
-    
-
-
+   
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
@@ -107,6 +71,7 @@ try{
     }
 
 } catch(\PDOException $e) {
+    error_log('PDOException: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
   }
 
