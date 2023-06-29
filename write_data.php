@@ -21,10 +21,10 @@ try{
     $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
 
     // Create the required tables if they do not exist
-    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid TEXT PRIMARY KEY)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid TEXT, colname TEXT)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT, colname TEXT)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT, colname TEXT)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid TEXT UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid TEXT UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid TEXT UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid TEXT UNIQUE)");
     
     // Dummy value to check if the connection is perfect or not 
    
@@ -42,15 +42,47 @@ try{
                         $ctype = 'integer';
                         $colname = substr($col, 0, -1);
                         $dpoint = round($dpoint);
-                        $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
+                        // $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+                        // $pdo->query("ALTER TABLE reaction_time ADD COLUMN $colname $ctype COLUMN_CHECK($colname IS NULL)");
+                        
+                        // Check if the column already exists in the table
+                        $checkColumnQuery = "SELECT COLUMN_NAME
+                        FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_NAME = 'reaction_time'
+                        AND COLUMN_NAME = '$colname'";
+
+                        $checkColumnResult = $pdo->query($checkColumnQuery);
+
+                        if ($checkColumnResult->num_rows === 0) {
+                        // Add the column with the desired data type
+                        $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
+                        $pdo->query($alterTableQuery);
+
+                        // insert statement
                         $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'R'){
                         // The subject response
                         $ctype = 'text';
                         $colname = substr($col, 0, -1);
-                        $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
+                        // $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
+                        // $pdo->query("ALTER TABLE response ADD COLUMN $colname $ctype COLUMN_CHECK($colname IS NULL)");
+
+                        // checking if column already exist
+                        $checkColumnQuery = "SELECT COLUMN_NAME
+                        FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_NAME = 'response'
+                        AND COLUMN_NAME = '$colname'";
+
+                        $checkColumnResult = $pdo->query($checkColumnQuery);
+
+                        #adding the column if it does not exist
+                        if ($checkColumnResult->num_rows === 0) {
+                            // Add the column with the desired data type
+                            $alterTableQuery = "ALTER TABLE response ADD COLUMN $colname $ctype";
+                            $pdo->query($alterTableQuery);
+
                         $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
@@ -59,8 +91,23 @@ try{
                         $ctype = 'integer';
                         $colname = substr($col, 0, -1);
                         $dpoint = round($dpoint);
-                        $pdo->query("ALTER TABLE ordering ADD COLUMN IF NOT EXISTS $colname $ctype");
+
+                        // $pdo->query("ALTER TABLE ordering ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
+
+                        // checking if column already exist
+                        $checkColumnQuery = "SELECT COLUMN_NAME
+                        FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_NAME = 'ordering'
+                        AND COLUMN_NAME = '$colname'";
+
+                        $checkColumnResult = $pdo->query($checkColumnQuery);
+
+                        #adding the column if it does not exist
+                        if ($checkColumnResult->num_rows === 0) {
+                            // Add the column with the desired data type
+                            $alterTableQuery = "ALTER TABLE ordering ADD COLUMN $colname $ctype";
+                            $pdo->query($alterTableQuery);
                         $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
 
                     }
