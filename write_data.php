@@ -62,7 +62,7 @@ try{
                         if ($checkColumnResult->num_rows === 0) {
                         // Add the column with the desired data type
                         $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
-                        $pdo->query($alterTableQuery);
+                        $pdo->query($alterTableQuery);}
 
                         // insert statement
                         $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
@@ -86,7 +86,7 @@ try{
                         if ($checkColumnResult->num_rows === 0) {
                             // Add the column with the desired data type
                             $alterTableQuery = "ALTER TABLE response ADD COLUMN $colname $ctype";
-                            $pdo->query($alterTableQuery);
+                            $pdo->query($alterTableQuery);}
 
                         $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
@@ -112,7 +112,7 @@ try{
                         if ($checkColumnResult->num_rows === 0) {
                             // Add the column with the desired data type
                             $alterTableQuery = "ALTER TABLE ordering ADD COLUMN $colname $ctype";
-                            $pdo->query($alterTableQuery);
+                            $pdo->query($alterTableQuery);}
                         $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
 
                     }
