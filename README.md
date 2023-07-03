@@ -1,4 +1,4 @@
-# R56
+# R56 Web 
 
 R56 is the project to collect pilot data for a Computerized Adaptive Test for Cognition (CAT-COG). This is the Javascript version of it for use in web browsers.
 
