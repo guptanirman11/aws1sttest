@@ -14,8 +14,11 @@ try{
     //     $db["pass"],
     //     ltrim($db["path"], "/")
     // ));
+    
+    #Database connection using mysqli
     $pdo = new mysqli($_SERVER['RDS_HOSTNAME'], $_SERVER['RDS_USERNAME'], $_SERVER['RDS_PASSWORD'], $_SERVER['RDS_DB_NAME'], $_SERVER['RDS_PORT']);
-
+    
+    $pdo->query("CREATE TABLE IF NOT EXISTS time_elapsed (pid VARCHAR(255) UNIQUE)");
 
     $time = $data_array->time;
     $pid = $data_array->pid;
