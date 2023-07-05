@@ -26,7 +26,7 @@ try{
     // $pdo->query("DROP TABLE IF EXISTS ordering");
 
     // Create the required tables if they do not exist
-    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid VARCHAR(255) UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid VARCHAR(255) UNIQUE, t TIMESTAMP WITH TIME ZONE default CURRENT_TIMESTAMP)");
     $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid VARCHAR(255) UNIQUE)");
     $pdo->query("CREATE TABLE IF NOT EXISTS response (pid VARCHAR(255) UNIQUE)");
     $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid VARCHAR(255) UNIQUE)");
