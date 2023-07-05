@@ -23,7 +23,7 @@ try{
     $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'time_elapsed'
-                        AND COLUMN_NAME = '$colname'";
+                        AND COLUMN_NAME = time_elapsed";
 
     $checkColumnResult = $pdo->query($checkColumnQuery);
 
