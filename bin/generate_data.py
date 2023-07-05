@@ -10,6 +10,10 @@ from solve import Trial
 import numpy as np
 from itertools import accumulate
 import re
+import pymysql
+import boto3
+
+bucket_name = 'memlab'
 
 pd.options.mode.chained_assignment = None  # default='warn' We do it safely.
 
@@ -19,13 +23,27 @@ pd.options.mode.chained_assignment = None  # default='warn' We do it safely.
 # On windows: set DATABASE_URL=postgres://BLAHBLAHBLAH
 # or export DATABASE_URL=`heroku config:get DATABASE_URL -a <APPNAME>`
 
-db = dataset.connect(os.environ['DATABASE_URL'])
+# db = dataset.connect(os.environ['DATABASE_URL'])
+db_host = 'awseb-e-s349zw8gmk-stack-awsebrdsdatabase-lqrb6j4bljdx.cfdb0atxmvs4.us-east-2.rds.amazonaws.com'
+db_user = 'admin'
+db_password = 'memlabtest'
+db_name = 'ebdb'
+
+# Create a database connection using pymysql and adding additional parameter to get data in dictionary form
+db = pymysql.connect(
+    host=db_host,
+    user=db_user,
+    password=db_password,
+    database=db_name,
+    cursorclass=pymysql.cursors.DictCursor
+)
+
 
 # This is a temporary fix, when you fix the pssc task itself, you can get rid of it.
 max_trials = 3
 
-if not os.path.exists('files'):
-    os.mkdir('files')
+# if not os.path.exists('files'):
+#     os.mkdir('files')
 
 def zipdir(path, ziph):
     for dirname, subdirs, files in os.walk(path):
@@ -158,6 +176,15 @@ def by_subject_old():
     zipf.close()
 
 
+def helper_by_subject(table:str):
+    cursor = db.cursor()
+    query = f"SELECT * FROM {table}";
+    cursor.execute(query)
+    result = cursor.fetchll()
+    cursor.close()
+    return result
+
+
 def by_subject():
     with open('./questions/json/qblock.json', 'r') as f:
         qblock = json.load(f, encoding='utf-8')
@@ -180,18 +207,25 @@ def by_subject():
         os.mkdir('files')
         os.mkdir('files/by_subject')
 
-    for i in db['response']:
+    query3 = "SELECT * FROM response";
+    cursor = db.cursor()
+    cursor.execute(query3)
+    res = cursor.fetchall()
+
+    for i in res:
         pid = i['pid']
         data = []
         tic = time()
-        r = rt.find_one(pid=pid)
-        o = ordering.find_one(pid=pid)
+        cursor.execute("SELECT * FROM reaction_time WHERE pid = %s",(pid,))
+        r = cursor.fetchone()
+        cursor.execute(f"SELECT * FROM ordering WHERE pid = %s",(pid,))
+        o =  cursor.fetchone()
 
         for j in i:
             if j == 'pid':
                 continue
             datum = {'item': j.upper()[1:-2],
-                     'reaction_time': r[j.lower()]}
+                     'reaction_time': r[j.upper()]}
 
             # This is a weird patch, take it out when you redo the trial data for LT and ES.
             if datum['item'][-7:] == 'UNDEFIN':
@@ -212,8 +246,8 @@ def by_subject():
                 datum['type'] = qblock[datum['item']]['kind']
                 datum['block'] = qblock[datum['item']]['difficulty']
 
-            if j.lower() in i:
-                datum['response'] = i[j.lower()]
+            if j.upper() in i:
+                datum['response'] = i[j.upper()]
             else:
                 datum['response'] = None
             if datum['item'][0:2] == 'ES':
@@ -230,7 +264,7 @@ def by_subject():
                     trials = qblock[datum['item']]['trials']
                 datum['answer'] = solver.batch_solve(stims, trials)[datum['trial']]
                 datum['score'] = datum['answer'] == datum['response']
-            datum['ordering'] = o[j.lower()]
+            datum['ordering'] = o[j.upper()]
 
             data.append(datum)
 
@@ -249,9 +283,16 @@ def by_subject():
         data[data.type == 'PSStringComparison'] = retime_pssc(data)
         data['reaction_time'].replace(0, 'NA', inplace=True)
         data.to_csv(f'files/by_subject/{subject}.csv', index=False)
+
+    
+    s3_client = boto3.client('s3')
+
     zipf = zipfile.ZipFile('files/by_subject.zip', 'w', zipfile.ZIP_DEFLATED)
     zipdir('files/by_subject', zipf)
     zipf.close()
+
+    s3_client.upload_file('files/by_subject.zip', bucket_name, 'by_subject.zip')
+
 
 
 def main():

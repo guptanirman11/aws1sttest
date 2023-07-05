@@ -51,6 +51,21 @@ function endTimer() {
     xhr.send(JSON.stringify(packet))
 }
 
+function runPythonScript() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '../run_python_script.php', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        console.log('Python script executed successfully');
+        // Additional code to handle the response if needed
+      } else {
+        console.error('Error executing Python script');
+      }
+    };
+    xhr.send();
+  }
+  
+
 function getParams(func) {
     /**
      * Helper function stolen from geeksforgeeks.
@@ -346,6 +361,8 @@ async function endBlock(qBlock){
 
     timeline.push({type: 'call-function',
         func: endTimer})
+    timeline.push({type: 'call-function',
+        func: runPythonScript})
 
     timeline.push({type: 'html-button-response',
     stimulus: "Thanks for taking the time to do this experiment!",
