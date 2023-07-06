@@ -199,13 +199,13 @@ def by_subject():
                 for trial, _ in enumerate(qblock[item]['stimuli']):
                     itcodes.append((item, trial))
 
-    ordering = db['ordering']
-    rt = db['reaction_time']
+    # ordering = db['ordering']
+    # rt = db['reaction_time']
     dfs = {}  # Dataframes will be in a dictionary, key will be pid, value will be dataframe.
 
-    if not os.path.exists('files/by_subject'):
-        os.mkdir('files')
-        os.mkdir('files/by_subject')
+    # if not os.path.exists('files/by_subject'):
+    #     os.mkdir('files')
+    #     os.mkdir('files/by_subject')
 
     query3 = "SELECT * FROM response";
     cursor = db.cursor()
@@ -213,6 +213,7 @@ def by_subject():
     res = cursor.fetchall()
 
     for i in res:
+        cursor = db.cursor()
         pid = i['pid']
         data = []
         tic = time()

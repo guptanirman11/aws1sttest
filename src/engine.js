@@ -53,7 +53,7 @@ function endTimer() {
 
 function runPythonScript() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '../run_python_script.php', true);
+    xhr.open('POST', '../run_python_script.php', true);
     xhr.onload = function() {
       if (xhr.status === 200) {
         console.log('Python script executed successfully');
