@@ -363,7 +363,7 @@ async function endBlock(qBlock){
         func: endTimer})
     timeline.push({type: 'call-function',
         func: runPythonScript})
-
+    
     timeline.push({type: 'html-button-response',
     stimulus: "Thanks for taking the time to do this experiment!",
     choices: ['Press here to complete the experiment.'],
@@ -447,10 +447,10 @@ async function main() {
     let qBlock = await loadQuestions();
 
 
-    // timeline.push(await practiceBlock(qBlock));
+    timeline.push(await practiceBlock(qBlock));
     // timeline.push(await startBlock(qBlock));
     // timeline.push(await hardBlock(qBlock));
-    timeline.push(await endBlock(qBlock));
+    // timeline.push(await endBlock(qBlock));
 
 
     jsPsych.init({timeline: timeline});
