@@ -35,7 +35,7 @@ try{
     $time = $data_array->time;
     $pid = $data_array->pid;
     // Sends in the total time in ms that the person spend taking the battery.
-    $pdo->query("INSERT INTO time_elapsed (pid, time_elapsed) VALUES ('$pid', $time)");
+    $pdo->query("INSERT INTO time_elapsed (pid, time_elapsed) VALUES ('$pid', $time) ON DUPLICATE KEY UPDATE time_elapsed =$time");
 } catch(\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
   }

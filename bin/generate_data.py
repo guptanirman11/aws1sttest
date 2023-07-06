@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pandas as pd
-import dataset
+# import dataset
 from time import time
 import zipfile
 import os
@@ -60,7 +60,7 @@ qblocktype = CategoricalDtype(['practice', 'easy', 'medium', 'hard', 'longterm',
 
 def cond_pssc(itemnum):
     with open('./questions/json/qblock.json', 'r') as f:
-        qblock = json.load(f, encoding='utf-8')
+        qblock = json.load(f)
     tsecs = qblock[itemnum]['stimsType']
     tsecs = float(tsecs[:-1])
     return int(tsecs * 1000)
@@ -187,7 +187,7 @@ def helper_by_subject(table:str):
 
 def by_subject():
     with open('./questions/json/qblock.json', 'r') as f:
-        qblock = json.load(f, encoding='utf-8')
+        qblock = json.load(f)
 
     itcodes = []
     for item in qblock:
@@ -203,9 +203,9 @@ def by_subject():
     # rt = db['reaction_time']
     dfs = {}  # Dataframes will be in a dictionary, key will be pid, value will be dataframe.
 
-    # if not os.path.exists('files/by_subject'):
-    #     os.mkdir('files')
-    #     os.mkdir('files/by_subject')
+    if not os.path.exists('files/by_subject'):
+        os.mkdir('files')
+        os.mkdir('files/by_subject')
 
     query3 = "SELECT * FROM response";
     cursor = db.cursor()
