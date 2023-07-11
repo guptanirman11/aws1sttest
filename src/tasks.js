@@ -187,16 +187,28 @@ function objectMelt(target){
                 let T = target[i]['rt'][j];
                 let A = target[i]['answer'][j];
                 let R = target[i]['response'][j];
-                let trialCode = 'I' + target[i]['item'] + 'T' + target[i]['trial'][j];
-                let Acode = (trialCode + 'A')
-                let Tcode = (trialCode + 'T');
-                let Rcode = (trialCode + 'R');
-                let Ocode = (trialCode + 'O');
-                let obj = {};
-                obj[Tcode] = T;
-                obj[Acode] = A;
-                obj[Rcode] = R;
-                obj[Ocode] = JORELL_MASTER_OF_SCHEDULING;
+                // let trialCode = 'I' + target[i]['item'] + 'T' + target[i]['trial'][j];
+                // let Acode = (trialCode + 'A')
+                // let Tcode = (trialCode + 'T');
+                // let Rcode = (trialCode + 'R');
+                // let Ocode = (trialCode + 'O');
+                // let obj = {};
+                // obj[Tcode] = T;
+                // obj[Acode] = A;
+                // obj[Rcode] = R;
+                // obj[Ocode] = JORELL_MASTER_OF_SCHEDULING;
+                
+                 ///////////////////////////////////
+                 let obj = {};
+                 obj['task'] = target[i]['task'];
+                 obj['item'] = target[i]['item'];
+                 obj['trial'] = target[i]['trial'][j];
+                 obj['reaction_time'] = T;
+                 obj['answer'] = A;
+                 obj['response'] = R;
+                 obj['ordering'] = JORELL_MASTER_OF_SCHEDULING;
+                 ///////////////////////////////////
+ 
                 trialnum += 1
                 output.push(obj)
             }
@@ -210,16 +222,27 @@ function objectMelt(target){
             let T = target[i]['rt'];
             let A = target[i]['answer'];
             let R = target[i]['response'];
-            let trialCode = 'I' + target[i]['item'] + 'T' + target[i]['trial'];
-            let Tcode = (trialCode + 'T');
-            let Acode = (trialCode + 'A');
-            let Rcode = (trialCode + 'R');
-            let Ocode = (trialCode + 'O');
+            // let trialCode = 'I' + target[i]['item'] + 'T' + target[i]['trial'];
+            // let Tcode = (trialCode + 'T');
+            // let Acode = (trialCode + 'A');
+            // let Rcode = (trialCode + 'R');
+            // let Ocode = (trialCode + 'O');
+            // let obj = {};
+            // obj[Tcode] = T;
+            // obj[Acode] = A;
+            // obj[Rcode] = R;
+            // obj[Ocode] = JORELL_MASTER_OF_SCHEDULING;
+            ///////////////////////////////////
             let obj = {};
-            obj[Tcode] = T;
-            obj[Acode] = A;
-            obj[Rcode] = R;
-            obj[Ocode] = JORELL_MASTER_OF_SCHEDULING;
+            obj['task'] = target[i]['task'];
+            obj['item'] = target[i]['item'];
+            obj['trial'] = target[i]['trial'];
+            obj['reaction_time'] = T;
+            obj['answer'] = A;
+            obj['response'] = R;
+            obj['ordering'] = JORELL_MASTER_OF_SCHEDULING;
+            ///////////////////////////////////
+
             output.push(obj)
 
         }

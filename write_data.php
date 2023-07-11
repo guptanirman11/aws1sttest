@@ -37,20 +37,21 @@ try{
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
             // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=pid");
+            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT(pid, '_A')");
             foreach ($data as $result){
                 $colnames = [];
                 $colvals = [];
                 foreach ($result as $col => $dpoint){
-                    if(substr($col, -1) === 'T'){
+                    if($col === 'reaction_time'){
                         // For reaction times
                         $ctype = 'integer';
-                        $colname = substr($col, 0, -1);
+                        // $colname = substr($col, 0, -1);
+                        $colname = "I" . $data["item"] . "T" . $data["trial"];
                         $dpoint = round($dpoint);
                         // $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         // $pdo->query("ALTER TABLE reaction_time ADD COLUMN $colname $ctype COLUMN_CHECK($colname IS NULL)");
-                        
+    
                         // Check if the column already exists in the table
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
@@ -67,10 +68,10 @@ try{
                         // insert statement
                         $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
-                    } else if(substr($col, -1) === 'R'){
+                    } else if(substr($col, -1) === 'response'){
                         // The subject response
                         $ctype = 'text';
-                        $colname = substr($col, 0, -1);
+                        $colname = "I" . $data["item"] . "T" . $data["trial"];
                         // $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("ALTER TABLE response ADD COLUMN $colname $ctype COLUMN_CHECK($colname IS NULL)");
 
@@ -91,10 +92,10 @@ try{
                         $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
-                    } else if(substr($col, -1) === 'O'){
+                    } else if(substr($col, -1) === 'ordering'){
                         // The ordering number that shows in which order the subject saw each task.
                         $ctype = 'integer';
-                        $colname = substr($col, 0, -1);
+                        $colname = "I" . $data["item"] . "T" . $data["trial"];
                         $dpoint = round($dpoint);
 
                         // $pdo->query("ALTER TABLE ordering ADD COLUMN IF NOT EXISTS $colname $ctype");
