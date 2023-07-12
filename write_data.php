@@ -44,7 +44,7 @@ try{
                     IFNULL(
                         (
                             SELECT CONCAT('$name', '_', SUBSTRING(MAX(CAST(SUBSTRING(pid, 2) AS UNSIGNED)), LENGTH('$name') + 2) + 1)
-                            FROM (SELECT * FROM timeofaction)
+                            FROM (SELECT * FROM timeofaction) as pid_suffix
                             WHERE pid LIKE CONCAT('$name', '_%')
                         ),
                         '$name'
