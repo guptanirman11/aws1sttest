@@ -26,10 +26,10 @@ try{
     // $pdo->query("DROP TABLE IF EXISTS ordering");
 
     // Create the required tables if they do not exist
-    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid VARCHAR(255) UNIQUE, t TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid VARCHAR(255) UNIQUE)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid VARCHAR(255) UNIQUE)");
-    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid VARCHAR(255) UNIQUE)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS timeofaction (pid VARCHAR(255) UNIQUE, run_number INT DEFAULT 1, t TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS reaction_time (pid VARCHAR(255) UNIQUE, run_number INT DEFAULT 1)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS response (pid VARCHAR(255) UNIQUE, run_number INT DEFAULT 1)");
+    $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid VARCHAR(255) UNIQUE, run_number INT DEFAULT 1)");
     
     // Dummy value to check if the connection is perfect or not 
     
@@ -86,10 +86,9 @@ try{
                             $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
                             $pdo->query($alterTableQuery);
                             $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
-                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
-                            $newPid = $name . '_1';
-                            $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$newPid', '$dpoint')");
-                        }
+                        // } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                        //     $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        // }
 
                         // insert statement
                         
@@ -119,10 +118,10 @@ try{
                             $alterTableQuery = "ALTER TABLE response ADD COLUMN $colname $ctype";
                             $pdo->query($alterTableQuery);
                             $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
-                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
-                            $newPid = $name . '_1';
-                            $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$newPid', '$dpoint')");
-                        }
+                        // } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                        //     $newPid = $name . '_1';
+                        //     $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        // }
 
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
@@ -155,10 +154,10 @@ try{
                             $alterTableQuery = "ALTER TABLE ordering ADD COLUMN $colname $ctype";
                             $pdo->query($alterTableQuery);
                             $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
-                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
-                            $newPid = $name . '_1';
-                            $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$newPid', '$dpoint')");
-                        }
+                        // } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                        //     $newPid = $name . '_1';
+                        //     $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        // }
                         /*$pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");*/
 
                     }
