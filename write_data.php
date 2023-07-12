@@ -37,7 +37,7 @@ try{
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
             
-            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
+            $pdo->query("INSERT IGNORE INTO timeofaction (pid) VALUES ('$name')");
             // $pdo->query("
             //     INSERT INTO timeofaction (pid)
             //     VALUES (
