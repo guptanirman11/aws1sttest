@@ -56,6 +56,7 @@ try{
                 $colnames = [];
                 $colvals = [];
                 foreach ($result as $col => $dpoint){
+                    error_log($result['item']);
                     if($col === 'reaction_time'){
                         // For reaction times
                         $ctype = 'integer';
