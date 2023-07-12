@@ -38,7 +38,7 @@ try{
         foreach ($data_array as $name => $data){
             console_log($data)
             // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT($name, '_A')");
+            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT('$name', '_A')");
             foreach ($data as $result){
                 $colnames = [];
                 $colvals = [];
