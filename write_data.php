@@ -36,21 +36,21 @@ try{
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
-            error_log(json_encode($data));
-            // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-            $pdo->query("
-                INSERT INTO timeofaction (pid)
-                VALUES (
-                    IFNULL(
-                        (
-                            SELECT CONCAT('$name', '_', SUBSTRING(MAX(CAST(SUBSTRING(pid, 2) AS UNSIGNED)), LENGTH('$name') + 2) + 1)
-                            FROM (SELECT * FROM timeofaction) AS pid_suffix
-                            WHERE pid LIKE CONCAT('$name', '_%')
-                        ),
-                        '$name'
-                    )
-                )
-            ");
+            
+            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
+            // $pdo->query("
+            //     INSERT INTO timeofaction (pid)
+            //     VALUES (
+            //         IFNULL(
+            //             (
+            //                 SELECT CONCAT('$name', '_', SUBSTRING(MAX(CAST(SUBSTRING(pid, 2) AS UNSIGNED)), LENGTH('$name') + 2) + 1)
+            //                 FROM (SELECT * FROM timeofaction) AS pid_suffix
+            //                 WHERE pid LIKE CONCAT('$name', '_%')
+            //             ),
+            //             '$name'
+            //         )
+            //     )
+            // ");
 
             foreach ($data as $result){
                 $colnames = [];
@@ -60,7 +60,7 @@ try{
                         // For reaction times
                         $ctype = 'integer';
                         // $colname = substr($col, 0, -1);
-                        $colname = "I" . $data["item"] . "T" . $data["trial"];
+                        $colname = "I" . $result["item"] . "T" . $result["trial"];
                         $dpoint = round($dpoint);
                         // $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
@@ -70,22 +70,34 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'reaction_time'
-                        AND COLUMN_NAME = '$colname'";
+                        AND COLUMN_NAME = '$colname'
+                        AND COLUMN_NAME IS NOT NULL";
+
+                        $checkPidQuery = "SELECT pid
+                        FROM reaction_time
+                        WHERE pid = '$name'";
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
-
-                        if ($checkColumnResult->num_rows === 0) {
-                        // Add the column with the desired data type
-                        $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
-                        $pdo->query($alterTableQuery);}
+                        $checkPidResult = $pdo->query($checkPidQuery);
+                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                            /*Add the column with the desired data type
+                            */
+                            $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
+                            $pdo->query($alterTableQuery);
+                            $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                            $newPid = $name . '_1';
+                            $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        }
 
                         // insert statement
-                        $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                        
+                        // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'response'){
                         // The subject response
                         $ctype = 'text';
-                        $colname = "I" . $data["item"] . "T" . $data["trial"];
+                        $colname = "I" . $result["item"] . "T" . $result["trial"];
                         // $pdo->query("ALTER TABLE response ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("ALTER TABLE response ADD COLUMN $colname $ctype COLUMN_CHECK($colname IS NULL)");
 
@@ -93,23 +105,31 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'response'
-                        AND COLUMN_NAME = '$colname'";
+                        AND COLUMN_NAME = '$colname'
+                        AND COLUMN_NAME IS NOT NULL";
+
+                        $checkPidQuery = "SELECT pid FROM response WHERE pid = '$name'";
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
-
-                        #adding the column if it does not exist
-                        if ($checkColumnResult->num_rows === 0) {
-                            // Add the column with the desired data type
+                        $checkPidResult = $pdo->query($checkPidQuery);
+                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                            /*Add the column with the desired data type
+                            */
                             $alterTableQuery = "ALTER TABLE response ADD COLUMN $colname $ctype";
-                            $pdo->query($alterTableQuery);}
+                            $pdo->query($alterTableQuery);
+                            $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                            $newPid = $name . '_1';
+                            $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        }
 
-                        $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                        // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'ordering'){
                         // The ordering number that shows in which order the subject saw each task.
                         $ctype = 'integer';
-                        $colname = "I" . $data["item"] . "T" . $data["trial"];
+                        $colname = "I" . $result["item"] . "T" . $result["trial"];
                         $dpoint = round($dpoint);
 
                         // $pdo->query("ALTER TABLE ordering ADD COLUMN IF NOT EXISTS $colname $ctype");
@@ -119,16 +139,26 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'ordering'
-                        AND COLUMN_NAME = '$colname'";
+                        AND COLUMN_NAME = '$colname'
+                        AND COLUMN_NAME IS NOT NULL";
+
+                        $checkPidQuery = "SELECT pid
+                        FROM ordering
+                        WHERE pid = '$name'";
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
-
-                        #adding the column if it does not exist
-                        if ($checkColumnResult->num_rows === 0) {
-                            // Add the column with the desired data type
+                        $checkPidResult = $pdo->query($checkPidQuery);
+                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                            /*Add the column with the desired data type
+                            */
                             $alterTableQuery = "ALTER TABLE ordering ADD COLUMN $colname $ctype";
-                            $pdo->query($alterTableQuery);}
-                        $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                            $pdo->query($alterTableQuery);
+                            $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
+                        } elseif ($checkColumnResult->num_rows > 0 && $checkPidResult->num_rows >= 0) {
+                            $newPid = $name . '_1';
+                            $pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$newPid', '$dpoint')");
+                        }
+                        /*$pdo->query("INSERT INTO ordering (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");*/
 
                     }
 
