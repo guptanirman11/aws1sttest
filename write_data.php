@@ -32,12 +32,13 @@ try{
     $pdo->query("CREATE TABLE IF NOT EXISTS ordering (pid VARCHAR(255) UNIQUE)");
     
     // Dummy value to check if the connection is perfect or not 
-   
+    
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
+            console_log($data)
             // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT(pid, '_A')");
+            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT($name, '_A')");
             foreach ($data as $result){
                 $colnames = [];
                 $colvals = [];
