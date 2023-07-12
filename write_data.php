@@ -36,9 +36,22 @@ try{
     // The access object
     if (is_array($data_array) || is_object($data_array)) {
         foreach ($data_array as $name => $data){
-            console_log(json_encode($data));
+            error_log(json_encode($data));
             // $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON CONFLICT DO NOTHING");
-            $pdo->query("INSERT INTO timeofaction (pid) VALUES ('$name') ON DUPLICATE KEY UPDATE pid=CONCAT('$name', '_A')");
+            $pdo->query("
+                INSERT INTO timeofaction (pid)
+                VALUES (
+                    IFNULL(
+                        (
+                            SELECT CONCAT('$name', '_', SUBSTRING(MAX(CAST(SUBSTRING(pid, 2) AS UNSIGNED)), LENGTH('$name') + 2) + 1)
+                            FROM timeofaction
+                            WHERE pid LIKE CONCAT('$name', '_%')
+                        ),
+                        '$name'
+                    )
+                )
+            ");
+
             foreach ($data as $result){
                 $colnames = [];
                 $colvals = [];
