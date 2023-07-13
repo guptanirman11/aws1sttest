@@ -67,7 +67,7 @@ try{
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
                         $checkPidResult = $pdo->query($checkPidQuery);
-                        error_log($checkColumnResult);
+                        error_log("$checkColumnResult");
                         if ($checkColumnResult->num_rows === 0) {
                             /*Add the column with the desired data type
                             */
