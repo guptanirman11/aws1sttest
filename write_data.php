@@ -56,7 +56,7 @@ try{
                 $colnames = [];
                 $colvals = [];
                 foreach ($result as $col => $dpoint){
-                    error_log($result['item']);
+                    // error_log($result['item']);
                     if($col === 'reaction_time'){
                         // For reaction times
                         $ctype = 'integer';
@@ -71,8 +71,7 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'reaction_time'
-                        AND COLUMN_NAME = '$colname'
-                        AND COLUMN_NAME IS NOT NULL";
+                        AND COLUMN_NAME = '$colname'";
 
                         $checkPidQuery = "SELECT pid
                         FROM reaction_time
@@ -80,9 +79,11 @@ try{
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
                         $checkPidResult = $pdo->query($checkPidQuery);
-                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                        if ($checkColumnResult->num_rows === 0) {
                             /*Add the column with the desired data type
                             */
+                            error_log("inside if");
+                            error_log($colname);
                             $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
                             $pdo->query($alterTableQuery);
                             $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
@@ -94,7 +95,7 @@ try{
                         // insert statement
                         
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
-                        error_log($dpoint, $with_script_tags=FALSE);
+                        // error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'response'){
                         // The subject response
                         $ctype = 'text';
@@ -106,14 +107,13 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'response'
-                        AND COLUMN_NAME = '$colname'
-                        AND COLUMN_NAME IS NOT NULL";
+                        AND COLUMN_NAME = '$colname'";
 
                         $checkPidQuery = "SELECT pid FROM response WHERE pid = '$name'";
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
                         $checkPidResult = $pdo->query($checkPidQuery);
-                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                        if ($checkColumnResult->num_rows === 0) {
                             /*Add the column with the desired data type
                             */
                             $alterTableQuery = "ALTER TABLE response ADD COLUMN $colname $ctype";
@@ -127,7 +127,7 @@ try{
 
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
-                        error_log($dpoint, $with_script_tags=FALSE);
+                        // error_log($dpoint, $with_script_tags=FALSE);
                     } else if(substr($col, -1) === 'ordering'){
                         // The ordering number that shows in which order the subject saw each task.
                         $ctype = 'integer';
@@ -141,8 +141,7 @@ try{
                         $checkColumnQuery = "SELECT COLUMN_NAME
                         FROM INFORMATION_SCHEMA.COLUMNS
                         WHERE TABLE_NAME = 'ordering'
-                        AND COLUMN_NAME = '$colname'
-                        AND COLUMN_NAME IS NOT NULL";
+                        AND COLUMN_NAME = '$colname'";
 
                         $checkPidQuery = "SELECT pid
                         FROM ordering
@@ -150,7 +149,7 @@ try{
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
                         $checkPidResult = $pdo->query($checkPidQuery);
-                        if ($checkColumnResult->num_rows === 0 && $checkPidResult->num_rows >= 0) {
+                        if ($checkColumnResult->num_rows === 0) {
                             /*Add the column with the desired data type
                             */
                             $alterTableQuery = "ALTER TABLE ordering ADD COLUMN $colname $ctype";
