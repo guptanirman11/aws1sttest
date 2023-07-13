@@ -64,11 +64,13 @@ try{
                         // Add the column with the desired data type
                         $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
                         $pdo->query($alterTableQuery);}
+                        
 
                         // insert statement
+
                         $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
-                    } else if(substr($col, -1) === 'response'){
+                    } else if($col === 'response'){
                         // The subject response
                         $ctype = 'text';
                         $colname = "I" . $result["item"] . "T" . $result["trial"];
@@ -92,7 +94,7 @@ try{
                         $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
                         // $pdo->query("INSERT INTO response (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
                         error_log($dpoint, $with_script_tags=FALSE);
-                    } else if(substr($col, -1) === 'ordering'){
+                    } else if($col === 'ordering'){
                         // The ordering number that shows in which order the subject saw each task.
                         $ctype = 'integer';
                         $colname = "I" . $result["item"] . "T" . $result["trial"];
