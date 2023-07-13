@@ -49,7 +49,7 @@ try{
                         $ctype = 'integer';
                         // $colname = substr($col, 0, -1);
                         $colname = "I" . $result["item"] . "T" . $result["trial"];
-                        error_log($colname);
+                        // error_log($colname);
                         $dpoint = round($dpoint);
                         // $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
@@ -67,6 +67,7 @@ try{
 
                         $checkColumnResult = $pdo->query($checkColumnQuery);
                         $checkPidResult = $pdo->query($checkPidQuery);
+                        error_log($checkColumnResult);
                         if ($checkColumnResult->num_rows === 0) {
                             /*Add the column with the desired data type
                             */
