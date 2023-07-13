@@ -38,19 +38,6 @@ try{
         foreach ($data_array as $name => $data){
             
             $pdo->query("INSERT IGNORE INTO timeofaction (pid) VALUES ('$name')");
-            // $pdo->query("
-            //     INSERT INTO timeofaction (pid)
-            //     VALUES (
-            //         IFNULL(
-            //             (
-            //                 SELECT CONCAT('$name', '_', SUBSTRING(MAX(CAST(SUBSTRING(pid, 2) AS UNSIGNED)), LENGTH('$name') + 2) + 1)
-            //                 FROM (SELECT * FROM timeofaction) AS pid_suffix
-            //                 WHERE pid LIKE CONCAT('$name', '_%')
-            //             ),
-            //             '$name'
-            //         )
-            //     )
-            // ");
 
             foreach ($data as $result){
                 $colnames = [];
@@ -62,6 +49,7 @@ try{
                         $ctype = 'integer';
                         // $colname = substr($col, 0, -1);
                         $colname = "I" . $result["item"] . "T" . $result["trial"];
+                        error_log($colname);
                         $dpoint = round($dpoint);
                         // $pdo->query("ALTER TABLE reaction_time ADD COLUMN IF NOT EXISTS $colname $ctype");
                         // $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON CONFLICT (pid) DO UPDATE SET $colname = '$dpoint'");
@@ -83,7 +71,7 @@ try{
                             /*Add the column with the desired data type
                             */
                             error_log("inside if");
-                            error_log($colname);
+                            
                             $alterTableQuery = "ALTER TABLE reaction_time ADD COLUMN $colname $ctype";
                             $pdo->query($alterTableQuery);
                             $pdo->query("INSERT INTO reaction_time (pid, $colname) VALUES ('$name', '$dpoint') ON DUPLICATE KEY UPDATE $colname='$dpoint'");
